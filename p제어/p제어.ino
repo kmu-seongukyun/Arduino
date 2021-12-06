@@ -15,7 +15,7 @@
 #define _DIST_MAX 410        
 
 // Distance sensor
-#define _DIST_ALPHA 0.6 
+#define _DIST_ALPHA 0.3 
 
 // Servo range
 #define _DUTY_MIN 1290       
@@ -155,7 +155,7 @@ myservo.writeMicroseconds(duty_curr);
 
 float ir_distance(void){ // return value unit: mm
   float val;
-  int a = 83;
+  int a = 150;
   int b = 270;
   float volt = float(analogRead(PIN_IR));
   val = ((6762.0/(volt-9.0))-4.0) * 10.0;
