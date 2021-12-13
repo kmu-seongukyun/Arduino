@@ -10,7 +10,7 @@
 #define PIN_IR A0     // 적외선 센서를 아두이노 아날로그 A0핀에 연결
 
 // Framework setting
-#define _DIST_TARGET 295    // [2635] 목표하는 위치
+#define _DIST_TARGET 295    // 목표하는 위치
 #define _DIST_MIN 100   //거리의 최솟값이 100mm
 #define _DIST_MAX 410                  //거리의 최대값 410mm
 #define LENGTH 30
@@ -69,27 +69,27 @@ int duty_chg_per_interval; //  서보속도 제어를 위한 변수 선언
 int duty_target, duty_curr; //  목표duty, 현재duty
 
 // PID variables
-float error_curr, error_prev, control, pterm, dterm, iterm; // [3070] PID 제어를 위한 현재 오차, 이전오차, 컨트롤(?), p 값, d 값, i 값 변수 선언
+float error_curr, error_prev, control, pterm, dterm, iterm; // PID 제어를 위한 현재 오차, 이전오차, 컨트롤(?), p 값, d 값, i 값 변수 선언
 
 
 void setup() {
 // initialize GPIO pins for LED and attach servo 
-  pinMode(PIN_LED, OUTPUT); //[3062] 핀 LED 활성화
-  myservo.attach(PIN_SERVO); // [3070] 서보 구동을 위한 서보 초기화
+  pinMode(PIN_LED, OUTPUT); // 핀 LED 활성화
+  myservo.attach(PIN_SERVO); // 서보 구동을 위한 서보 초기화
 
 // initialize global variables
 duty_target = _DUTY_NEU;
 duty_curr = _DUTY_NEU; // [3055] duty_target, duty_curr 초기화
 last_sampling_time_dist, last_sampling_time_servo, last_sampling_time_serial = millis();
-// [3055] 샘플링 타임 변수 초기화
-dist_f, dist_ema = _DIST_MIN; // [3055] dist 변수 초기화
-pterm = iterm = dterm = 0; // [2635] pid 제어값에서 우선 p 만 사용하도록
+//  샘플링 타임 변수 초기화
+dist_f, dist_ema = _DIST_MIN; // dist 변수 초기화
+pterm = iterm = dterm = 0; // pid 제어값에서 우선 p 만 사용하도록
 
 // move servo to neutral position
-  myservo.writeMicroseconds(_DUTY_NEU); //[2635]
+  myservo.writeMicroseconds(_DUTY_NEU); 
 
 // initialize serial port
-  Serial.begin(57600); //[2635]
+  Serial.begin(57600); 
 
   a = 83;
   b = 270;
@@ -162,12 +162,12 @@ float filtered_ir_distance(void){ // 아래로 떨어지는 형태의 스파이�
 }
 
 void loop() {
-    // [3055] indentation 수정(space 4칸)
+    // indentation 수정(space 4칸)
     /////////////////////
     // Event generator //
     /////////////////////
-    unsigned long time_curr = millis(); // [3070] 이벤트 업데이트 주기 계산을 위한 현재 시간
-    // [3070] 이벤트 주기가 돌아올때까지 현재시간과 비교하며 기다리도록 함.
+    unsigned long time_curr = millis(); // 이벤트 업데이트 주기 계산을 위한 현재 시간
+    // 이벤트 주기가 돌아올때까지 현재시간과 비교하며 기다리도록 함.
     if(time_curr >= last_sampling_time_dist + _INTERVAL_DIST) {
         last_sampling_time_dist += _INTERVAL_DIST;
         event_dist = true;
@@ -186,22 +186,22 @@ void loop() {
     ////////////////////
 
     if(event_dist) {
-        event_dist = false; // [2635] 업데이트 대기
+        event_dist = false; //  업데이트 대기
         // get a distance reading from the distance sensor
         dist_f = filtered_ir_distance(); 
         
         // PID control logic
-        error_curr = _DIST_TARGET-dist_f; // [2635] 오차 계산
+        error_curr = _DIST_TARGET-dist_f; // 오차 계산
         pterm = error_curr; // [2635] p값은 오차
         dterm = _KD*(error_curr - error_prev);
-        control = _KP * pterm+dterm;// [2635] control 값, i와 d는 현재 0
+        control = _KP * pterm+dterm;// control 값, i와 d는 현재 0
 
         // duty_target = f(duty_neutral, control)
         //duty_target = duty_neutral + control // [3070] control 값이 다 합해서 1이 되도록 되어있다면, 중립 위치에 컨트롤 값 만큼의 비율을 더해 목표위치를 정한다.
         duty_target = _DUTY_NEU + control;
 
   // keep duty_target value within the range of [_DUTY_MIN, _DUTY_MAX]
-        if(duty_target < _DUTY_MIN)  // [2635] 양극값 넘어가는 경우 극값으로 제한
+        if(duty_target < _DUTY_MIN)  // 양극값 넘어가는 경우 극값으로 제한
         {
             duty_target = _DUTY_MIN;
         }
