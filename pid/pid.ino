@@ -3,7 +3,7 @@
 #define PIN_IR A0
 #define PIN_LED 9
 
-#define _DIST_TARGET 257  //탁구공위치
+#define _DIST_TARGET 247  //탁구공위치
 #define _DIST_MIN 100   //거리 최소
 #define _DIST_MAX 410    //거리 최대
 #define _DIST_ALPHA 0.05 //EMA 필터링을 위한 알파값(0~1)
